@@ -19,7 +19,7 @@ REDIS_SOCKET_TIMEOUT = int(os.getenv('REDIS_SOCKET_TIMEOUT', 10))
 
 # Kafka server information
 KAFKA_HOSTS = [x.strip() for x in os.getenv('KAFKA_HOSTS', 'kafka:9092').split(',')]
-KAFKA_TOPIC_PREFIX = os.getenv('KAFKA_TOPIC_PREFIX', 'authors')
+KAFKA_TOPIC_PREFIX = os.getenv('KAFKA_TOPIC_PREFIX', 'events')
 KAFKA_APPID_TOPICS = str2bool(os.getenv('KAFKA_APPID_TOPICS', False))
 # base64 encode the html body to avoid json dump errors due to malformed text
 KAFKA_BASE_64_ENCODE = str2bool(os.getenv('KAFKA_BASE_64_ENCODE', False))
