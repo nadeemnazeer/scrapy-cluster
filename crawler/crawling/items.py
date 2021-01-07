@@ -4,8 +4,9 @@
 
 from scrapy import Item, Field
 
-
 class RawResponseItem(Item):
+    item_id = Field()
+    item_type = Field()
     appid = Field()
     crawlid = Field()
     url = Field()
@@ -20,7 +21,10 @@ class RawResponseItem(Item):
     success = Field()
     exception = Field()
     encoding = Field()
-
+    name = Field()
+    birthdate = Field()
+    text =  Field()
+    
     event_name = Field()
     event_url =  Field()
     event_id = Field()
@@ -28,3 +32,18 @@ class RawResponseItem(Item):
     event_format = Field()
     event_image = Field()
     event_location_type = Field()
+    event_start_date = Field()
+    event_end_date = Field()
+    event_start_time = Field()
+    event_end_time = Field()
+    event_organizer = Field()
+    organizer_name = Field()
+    organizer_profile_url =  Field()
+    organizer_description = Field()
+    organiser_total_events = Field()
+    venue_name = Field()
+    street_address_1 = Field() 
+    street_address_2 = Field()
+    city = Field()
+    state = Field()
+    country = Field()

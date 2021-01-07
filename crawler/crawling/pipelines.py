@@ -57,15 +57,11 @@ class LoggingBeforePipeline(object):
         if isinstance(item, RawResponseItem):
             # make duplicate item, but remove unneeded keys
             item_copy = dict(item)
-            del item_copy['body']
-            del item_copy['links']
-            del item_copy['response_headers']
-            del item_copy['request_headers']
             item_copy['logger'] = self.logger.name
             item_copy['action'] = 'emit'
             item_copy['spiderid'] = spider.name
             self.logger.info('Scraped page', extra=item_copy)
-            return item
+            return item_copy
         else:
             self.logger.warn('Received unknown item')
             return None
