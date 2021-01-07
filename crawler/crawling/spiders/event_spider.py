@@ -142,6 +142,14 @@ class EventSpider(RedisSpider):
                         item['state'] = event['primary_venue']['address']['region']
                     if 'city' in  event['primary_venue']['address']:
                         item['city'] = event['primary_venue']['address']['city']
+                    if 'address_1' in  event['primary_venue']['address']:
+                        item['street_address_1'] = event['primary_venue']['address']['address_1']
+                    if 'localized_multi_line_address_display' in  event['primary_venue']['address']:
+                        addr_2 = event['primary_venue']['address']['localized_multi_line_address_display']
+                        if len(addr_2) > 0:
+                            item['street_address_2'] = addr_2[0]
+                        if len(addr_2) > 1:
+                            item['street_address_2'] = addr_2[1]
         except Exception as e:
             print("KEY ERROR",e)
 
@@ -182,9 +190,13 @@ class EventSpider(RedisSpider):
         past_events_text = response.xpath("//*[contains(text(), 'Past Events')]/text()").extract_first()
         organiser_total_events = 0
         if live_events_text:
-            organiser_total_events += int(live_events_text.strip("Live Events"))
+            count = live_events_text.strip("Live Events")
+            if count:
+                organiser_total_events += int(count)
         if past_events_text:
-            organiser_total_events += int(past_events_text.strip("Past Events"))
+            count = past_events_text.strip("Past Events")
+            if count:
+                organiser_total_events += int(count)
         item['organiser_total_events'] = organiser_total_events
 
         yield item

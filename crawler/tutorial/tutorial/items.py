@@ -45,6 +45,8 @@ class OrganizerItem(Item):
     organizer_description = Field()
 
 class RawResponseItem(Item):
+    item_id = Field()
+    item_type = Field()
     appid = Field()
     crawlid = Field()
     url = Field()
@@ -78,6 +80,7 @@ class RawResponseItem(Item):
     organizer_name = Field()
     organizer_profile_url =  Field()
     organizer_description = Field()
+    organiser_total_events = Field()
     venue_name = Field()
     street_address_1 = Field() 
     street_address_2 = Field()
