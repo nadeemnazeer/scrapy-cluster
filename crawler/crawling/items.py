@@ -20,3 +20,6 @@ class RawResponseItem(Item):
     success = Field()
     exception = Field()
     encoding = Field()
+    name = Field()
+    birthdate = Field()
+    text =  Field()
