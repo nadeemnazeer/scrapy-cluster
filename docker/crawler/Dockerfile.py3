@@ -33,4 +33,4 @@ COPY docker/run_docker_tests.sh /usr/src/app/run_docker_tests.sh
 # set up environment variables
 
 # run the spider
-CMD ["scrapy", "runspider", "crawling/spiders/author_spider.py"]
+CMD ["scrapy", "runspider", "crawling/spiders/event_spider.py"]

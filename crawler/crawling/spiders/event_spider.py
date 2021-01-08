@@ -5,7 +5,7 @@ import requests
 from scrapy.http import Request
 from crawling.spiders.lxmlhtml import CustomLxmlLinkExtractor as LinkExtractor
 from scrapy.conf import settings
-
+import datetime
 from crawling.items import RawResponseItem
 from crawling.spiders.redis_spider import RedisSpider
 
@@ -40,7 +40,7 @@ class EventSpider(RedisSpider):
         def parse_events(s):
             s = s.split('"results":')
             r = s[1].split(',"aggs"')
-            events = json.loads(r[0])
+            events = json.loads(r[0], strict=False)
             return events
 
         def fetch_events_details(even_ids):
@@ -89,7 +89,7 @@ class EventSpider(RedisSpider):
     def get_other_details(self,s):
         r = s.split('<script type="application/ld+json">')
         j = r[1].split('</script>')
-        details = json.loads(j[0])
+        details = json.loads(j[0], strict=False)
         return details
 
     def parse_event(self, response):
@@ -111,7 +111,8 @@ class EventSpider(RedisSpider):
         try:
             item['event_name'] = event['name']
             item['event_url'] =  event['url'] #event_url
-            item['event_image'] = event['image']['original']['url']
+            if 'image' in event:
+                item['event_image'] = event['image']['original']['url']
             event_categories = []
             event_formats = []
             for tag in event['tags']:
@@ -124,11 +125,12 @@ class EventSpider(RedisSpider):
             item["event_location_type"] = "OnPrem"
             if event['is_online_event']:
                 item["event_location_type"] = "Online"
-            item['event_start_date'] = event['start_date']
+            date_reformat = datetime.datetime.strptime(event['start_date'], '%Y-%m-%d').strftime('%m-%d-%y')
+            item['event_start_date'] = date_reformat
             item['event_start_time'] = event['start_time']
-            
             if 'end_date' in event:
-                item['event_end_date'] = event['end_date']
+                date_reformat = datetime.datetime.strptime(event['end_date'], '%Y-%m-%d').strftime('%m-%d-%y')
+                item['event_end_date'] = date_reformat
             if 'end_time' in event:
                 item['event_end_time'] = event['end_time']
 
@@ -154,7 +156,7 @@ class EventSpider(RedisSpider):
             print("KEY ERROR",e)
 
         #Optionally we can scrap some elements from event details page itself
-        item['event_name'] = response.css('h1[class=listing-hero-title]::text').extract()[0]
+        #item['event_name'] = response.css('h1[class=listing-hero-title]::text').extract()[0]
         item['item_type'] = "event"
         
         organizer_details = self.get_other_details(response.text)['organizer']
